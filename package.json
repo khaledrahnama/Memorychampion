@@ -1,0 +1,12 @@
+{
+  "name": "monad-memory-challenge",
+  "private": true,
+  "description": "Not an npm workspace: contracts/, backend/ and frontend/ are independent projects, each with its own node_modules. The scripts here are shortcuts used by Vercel and for local runs.",
+  "scripts": {
+    "vercel-install": "npm ci --prefix backend && npm ci --prefix frontend",
+    "vercel-build": "node scripts/vercel-build.mjs"
+  },
+  "engines": {
+    "node": ">=20.19"
+  }
+}

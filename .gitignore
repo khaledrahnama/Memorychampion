@@ -1,0 +1,15 @@
+node_modules
+dist
+.env
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+contracts/artifacts
+contracts/cache
+frontend/tsconfig.tsbuildinfo
+contracts/build
+.vercel
+.vercel
+.local-*.log
+.DS_Store

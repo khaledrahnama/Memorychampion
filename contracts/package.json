@@ -1,0 +1,29 @@
+{
+  "name": "@monad-memory/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "node": "hardhat node",
+    "build:solcjs": "node scripts/compile-solcjs.cjs",
+    "deploy:local": "node scripts/compile-solcjs.cjs && node scripts/deploy-solcjs.cjs",
+    "deploy:monad": "node scripts/compile-solcjs.cjs && CHAIN_ID=10143 RPC_URL=${MONAD_TESTNET_RPC_URL:-https://testnet-rpc.monad.xyz} node scripts/deploy-solcjs.cjs"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/mocha": "^10.0.0",
+    "chai": "^4.4.0",
+    "dotenv": "^16.4.0",
+    "hardhat": "^2.22.0",
+    "keccak256": "^1.0.6",
+    "merkletreejs": "^0.3.11",
+    "solc": "0.8.24",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.5.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0",
+    "viem": "^2.56.9"
+  }
+}
