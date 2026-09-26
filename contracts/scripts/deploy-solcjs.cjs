@@ -13,8 +13,13 @@ const { privateKeyToAccount } = require("viem/accounts");
 
 const RPC_URL = process.env.RPC_URL || "http://127.0.0.1:8545";
 const CHAIN_ID = Number(process.env.CHAIN_ID || 31337);
-const DEPLOYER_PK = process.env.DEPLOYER_PK;
-if (!DEPLOYER_PK) throw new Error("Set DEPLOYER_PK to the private key that will deploy (and by default operate) the contract");
+// Accept keys as MetaMask exports them (64 hex chars, no 0x) or with 0x; ignore stray spaces/quotes.
+const RAW_PK = (process.env.DEPLOYER_PK || "").trim().replace(/^["']|["']$/g, "");
+if (!RAW_PK) throw new Error("Set DEPLOYER_PK to the private key that will deploy (and by default operate) the contract");
+const DEPLOYER_PK = RAW_PK.startsWith("0x") ? RAW_PK : `0x${RAW_PK}`;
+if (!/^0x[0-9a-fA-F]{64}$/.test(DEPLOYER_PK)) {
+  throw new Error(`DEPLOYER_PK doesn't look like a private key (expected 64 hex characters, got ${RAW_PK.replace(/^0x/, "").length}). Copy it again from MetaMask → Account details → Show private key.`);
+}
 
 const build = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "build", "MemoryGame.json"), "utf8"));
 

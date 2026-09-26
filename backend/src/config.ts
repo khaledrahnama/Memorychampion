@@ -12,6 +12,12 @@ function requiredInProd(name: string, devFallback: string): string {
 
 const chainId = Number(process.env.CHAIN_ID ?? 10143);
 
+function normalizeKey(raw?: string): `0x${string}` {
+  const k = (raw ?? "").trim().replace(/^["']|["']$/g, "");
+  if (!k) return "" as `0x${string}`;
+  return (k.startsWith("0x") ? k : `0x${k}`) as `0x${string}`;
+}
+
 export const config = {
   port: Number(process.env.PORT ?? 4000),
   jwtSecret: requiredInProd("JWT_SECRET", "local-dev-secret"),
@@ -30,7 +36,8 @@ export const config = {
     explorerUrl: process.env.EXPLORER_URL ?? (chainId === 10143 ? "https://testnet.monadvision.com" : "")
   },
   contractAddress: (process.env.CONTRACT_ADDRESS ?? "") as `0x${string}`,
-  operatorPrivateKey: (process.env.OPERATOR_PRIVATE_KEY ?? "") as `0x${string}`,
+  // Accept the key with or without 0x (MetaMask exports it without).
+  operatorPrivateKey: normalizeKey(process.env.OPERATOR_PRIVATE_KEY),
 
   resendApiKey: process.env.RESEND_API_KEY ?? "",
   emailFrom: process.env.EMAIL_FROM ?? "Monad Memory Challenge <onboarding@resend.dev>",
