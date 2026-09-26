@@ -5,7 +5,7 @@ import { authRouter } from "./routes/auth.js";
 import { gamesRouter } from "./routes/games.js";
 import { adminRouter } from "./routes/admin.js";
 import { errorHandler } from "./lib/http.js";
-import { operatorAddress } from "./lib/chain.js";
+import { operatorAddress, operatorKeyProblem } from "./lib/chain.js";
 
 // One Express app, used both by the local dev server (server.ts) and as the
 // Vercel serverless function (bundled by scripts/vercel-build.mjs).
@@ -26,6 +26,7 @@ api.get("/config", (_req, res) =>
     explorerUrl: config.chain.explorerUrl,
     contractAddress: config.contractAddress || null,
     operatorAddress: operatorAddress() ?? null,
+    operatorKeyProblem: operatorKeyProblem(),
     faucetUrl: config.chain.id === 10143 ? "https://faucet.monad.xyz" : null,
     serverTime: Date.now()
   })

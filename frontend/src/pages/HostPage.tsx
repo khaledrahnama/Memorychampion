@@ -104,6 +104,11 @@ export function HostPage() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+      {cfg.operatorKeyProblem && (
+        <div className="rounded-2xl border border-rose/50 bg-rose-soft p-5 text-sm text-rose lg:col-span-2">
+          <b>Server setup problem:</b> {cfg.operatorKeyProblem} Fix it in Vercel → Settings → Environment Variables, then redeploy.
+        </div>
+      )}
       <form onSubmit={create} className="panel p-7 sm:p-10">
         <h1 className="font-display text-[44px] font-extrabold leading-none sm:text-[52px]">Host a game</h1>
         <p className="mt-4 text-[16px] text-cream/75">

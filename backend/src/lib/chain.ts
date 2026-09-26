@@ -98,15 +98,37 @@ export async function hasClaimedOnchain(onchainGameId: number, wallet: string) {
 
 // ---- Operator (server-side signer) ----
 
+const KEY_HELP =
+  "OPERATOR_PRIVATE_KEY is not a valid private key. It must be the wallet's private key (64 hex characters, from MetaMask → Account details → Show private key) — not the wallet address.";
+
+function operatorAccount() {
+  if (!config.operatorPrivateKey) return undefined;
+  try {
+    return privateKeyToAccount(config.operatorPrivateKey);
+  } catch {
+    return null; // set but malformed
+  }
+}
+
 function operator() {
-  if (!config.operatorPrivateKey) throw new HttpError(503, "OPERATOR_PRIVATE_KEY is not configured on the server");
-  const account = privateKeyToAccount(config.operatorPrivateKey);
+  const account = operatorAccount();
+  if (account === undefined) throw new HttpError(503, "OPERATOR_PRIVATE_KEY is not configured on the server");
+  if (account === null) throw new HttpError(503, KEY_HELP);
   const wallet = createWalletClient({ account, chain, transport: http(config.chain.rpcUrl) });
   return { account, wallet };
 }
 
+/** Operator wallet address, or undefined if the key is missing or malformed (never throws). */
 export function operatorAddress() {
-  return config.operatorPrivateKey ? privateKeyToAccount(config.operatorPrivateKey).address : undefined;
+  return operatorAccount()?.address;
+}
+
+/** Human-readable problem with the operator key, if any (shown on the Host page). */
+export function operatorKeyProblem(): string | null {
+  const account = operatorAccount();
+  if (account === undefined) return "OPERATOR_PRIVATE_KEY is not set on the server.";
+  if (account === null) return KEY_HELP;
+  return null;
 }
 
 async function sendAndWait(functionName: "createGame" | "finalizeGame" | "cancelGame" | "withdrawUnclaimed", args: readonly unknown[], value?: bigint) {

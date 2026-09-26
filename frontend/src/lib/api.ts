@@ -91,6 +91,7 @@ export interface AppConfig {
   explorerUrl: string;
   contractAddress: `0x${string}` | null;
   operatorAddress: `0x${string}` | null;
+  operatorKeyProblem?: string | null;
   faucetUrl: string | null;
 }
 

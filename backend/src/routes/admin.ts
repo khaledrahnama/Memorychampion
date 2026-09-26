@@ -7,7 +7,7 @@ import { requireAdmin } from "../lib/auth.js";
 import { HttpError, route } from "../lib/http.js";
 import { config } from "../config.js";
 import {
-  cancelOnchain, createGameOnchain, operatorAddress, publicClient, readAccounting, readGame, withdrawOnchain
+  cancelOnchain, createGameOnchain, operatorAddress, operatorKeyProblem, publicClient, readAccounting, readGame, withdrawOnchain
 } from "../lib/chain.js";
 import { ensureFinalized, type GameRow } from "../lib/finalize.js";
 import { displayStatus, gameEndMs } from "../lib/schedule.js";
@@ -31,6 +31,7 @@ adminRouter.get(
       chainId: config.chain.id,
       contractAddress: config.contractAddress || null,
       operatorAddress: operator ?? null,
+      operatorKeyProblem: operatorKeyProblem(),
       operatorBalanceMon: balance === null ? null : formatEther(balance),
       emailConfigured: !!config.resendApiKey,
       photoSeconds: config.photoSeconds,
